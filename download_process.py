@@ -28,9 +28,12 @@ def create_tf_example(filename, encoded_jpeg, annotations, resize=True):
         image = Image.open(encoded_jpg_io)
         width, height = image.size
     else:
-        image_tensor = tf.io.decode_jpeg(encoded_jpeg)
+        # read the original size of the image
+        encoded_jpg_io = io.BytesIO(encoded_jpeg)
         image = Image.open(encoded_jpg_io)
         org_width, org_height = image.size
+
+        image_tensor = tf.io.decode_jpeg(encoded_jpeg)
         image_res = tf.cast(tf.image.resize(
             image_tensor, (640, 640)), tf.uint8)
         encoded_jpeg = tf.io.encode_jpeg(image_res).numpy()
