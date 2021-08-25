@@ -29,7 +29,10 @@ def create_tf_example(filename, encoded_jpeg, annotations, resize=True):
         width, height = image.size
     else:
         image_tensor = tf.io.decode_jpeg(encoded_jpeg)
-        image_res = tf.cast(tf.image.resize(image_tensor, (640, 640)), tf.uint8)
+        image = Image.open(encoded_jpg_io)
+        org_width, org_height = image.size
+        image_res = tf.cast(tf.image.resize(
+            image_tensor, (640, 640)), tf.uint8)
         encoded_jpeg = tf.io.encode_jpeg(image_res).numpy()
         width, height = 640, 640
 
@@ -44,12 +47,14 @@ def create_tf_example(filename, encoded_jpeg, annotations, resize=True):
     filename = filename.encode('utf8')
 
     for ann in annotations:
-        xmin, ymin = ann.box.center_x - 0.5 * ann.box.length, ann.box.center_y - 0.5 * ann.box.width
-        xmax, ymax = ann.box.center_x + 0.5 * ann.box.length, ann.box.center_y + 0.5 * ann.box.width
-        xmins.append(xmin / width)
-        xmaxs.append(xmax / width)
-        ymins.append(ymin / height)
-        ymaxs.append(ymax / height)
+        xmin, ymin = ann.box.center_x - 0.5 * \
+            ann.box.length, ann.box.center_y - 0.5 * ann.box.width
+        xmax, ymax = ann.box.center_x + 0.5 * \
+            ann.box.length, ann.box.center_y + 0.5 * ann.box.width
+        xmins.append(xmin / org_width)
+        xmaxs.append(xmax / org_width)
+        ymins.append(ymin / org_height)
+        ymaxs.append(ymax / org_height)
         classes.append(ann.type)
         classes_text.append(mapping[ann.type].encode('utf8'))
 
@@ -133,8 +138,9 @@ def download_and_process(filename, temp_dir, data_dir):
     os.remove(local_path)
 
 
-if __name__ == "__main__": 
-    parser = argparse.ArgumentParser(description='Download and process tf files')
+if __name__ == "__main__":
+    parser = argparse.ArgumentParser(
+        description='Download and process tf files')
     parser.add_argument('--data_dir', required=True,
                         help='processed data directory')
     parser.add_argument('--temp_dir', required=True,
@@ -143,13 +149,15 @@ if __name__ == "__main__":
     logger = get_module_logger(__name__)
     # open the filenames file
     with open('filenames.txt', 'r') as f:
-        filenames = f.read().splitlines() 
-    logger.info(f'Download {len(filenames)} files. Be patient, this will take a long time.')
-    
+        filenames = f.read().splitlines()
+    logger.info(
+        f'Download {len(filenames)} files. Be patient, this will take a long time.')
+
     data_dir = args.data_dir
     temp_dir = args.temp_dir
     # init ray
     ray.init(num_cpus=cpu_count())
 
-    workers = [download_and_process.remote(fn, temp_dir, data_dir) for fn in filenames[:100]]
+    workers = [download_and_process.remote(
+        fn, temp_dir, data_dir) for fn in filenames[:100]]
     _ = ray.get(workers)
