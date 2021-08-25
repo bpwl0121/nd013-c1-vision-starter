@@ -1,14 +1,25 @@
 # Object detection in an Urban Environment
 
-## Data
+## Setup
 
-For this project, we will be using data from the [Waymo Open dataset](https://waymo.com/open/). The files can be downloaded directly from the website as tar files or from the [Google Cloud Bucket](https://console.cloud.google.com/storage/browser/waymo_open_dataset_v_1_2_0_individual_files/) as individual tf records. 
+### Dataset
+For this project, we will be using data from the [Waymo Open dataset](https://waymo.com/open/). The files can be downloaded directly from the website as tar files or from the [Google Cloud Bucket](https://console.cloud.google.com/storage/browser/waymo_open_dataset_v_1_2_0_individual_files/) as individual tf records.
+ 
+ 
+```
+curl https://sdk.cloud.google.com | bash
+
+gcloud auth login
+
+source ~/.bashrc
+```
+### Splitting
 
 ## Structure
 
 The data in the classroom workspace will be organized as follows:
 ```
-/data/waymo/
+/home/workspace/data/processed
     - contains the tf records in the Tf Object detection api format.
 
 /home/workspace/data/
@@ -30,11 +41,6 @@ experiments/
 
 ## Prerequisites
 
-### Local Setup
-
-For local setup if you have your own Nvidia GPU, you can use the provided Dockerfile and requirements in the [build directory](./build).
-
-Follow [the README therein](./build/README.md) to create a docker container and install all prerequisites.
 
 ### Classroom Workspace
 
