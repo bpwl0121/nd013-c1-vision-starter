@@ -162,5 +162,6 @@ if __name__ == "__main__":
     ray.init(num_cpus=cpu_count())
 
     workers = [download_and_process.remote(
-        fn, temp_dir, data_dir) for fn in filenames[:100]]
+        # only 15 files not 100 as original
+        fn, temp_dir, data_dir) for fn in filenames[:15]]
     _ = ray.get(workers)
