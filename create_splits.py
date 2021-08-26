@@ -19,7 +19,7 @@ def split(data_dir):
         - data_dir [str]: data directory, /mnt/data
     """
     # TODO: Implement function
-    all_files_path =glob.glob(os.path.join(data_dir,"*.tfrecord"))
+    all_files_path =glob.glob(os.path.join(data_dir,"processed/*.tfrecord"))
 
 
     train_files_path, val_test_files_path=train_test_split(all_files_path,test_size=0.4)
@@ -34,16 +34,16 @@ def split(data_dir):
 
 
     dest_val = os.path.join(data_dir, 'val')
-    os.makedirs(dest_train, exist_ok=True)
-    for train_path in train_files_path:
-        shutil.move(val_files_path, dest_val)
+    os.makedirs(dest_val, exist_ok=True)
+    for val_path in val_files_path:
+        shutil.move(val_path, dest_val)
     print("validation dataset finished")
 
 
     dest_test = os.path.join(data_dir, 'test')
-    os.makedirs(dest_train, exist_ok=True)
-    for train_path in train_files_path:
-        shutil.move(test_files_path, dest_test)
+    os.makedirs(dest_test, exist_ok=True)
+    for test_path in test_files_path:
+        shutil.move(test_path, dest_test)
     print("test dataset finished")
 
 
