@@ -23,16 +23,19 @@ python download_process.py --data_dir /home/workspace/data/ --temp_dir /home/bac
 
 ### EDA
 
-![Alt text](https://github.com/bpwl0121/nd013-c1-vision-starter/tree/main/images/1.PNG) 
-![Alt text](https://github.com/bpwl0121/nd013-c1-vision-starter/tree/main/images/2.PNG)
-![Alt text](https://github.com/bpwl0121/nd013-c1-vision-starter/tree/main/images/5.PNG)
-![Alt text](https://github.com/bpwl0121/nd013-c1-vision-starter/tree/main/images/6.PNG)
+![avatar](images/1.PNG) 
+![avatar](images/2.PNG) 
+![avatar](images/5.PNG) 
+![avatar](images/6.PNG)
 
-![](images/11.png) 
+
+## dsdasda
+
+![avatar](images/11.PNG) 
 ![avatar](images/12.PNG) 
-![Alt text](images/13.png) 
-![Alt text](images/14.png)
-![Alt text](images/15.png) 
+![avatar](images/13.PNG) 
+![avatar](images/14.PNG)
+![avatar](images/15.PNG) 
 
 
 ### Cross validation
@@ -83,15 +86,15 @@ python main.py --logdir=/home/workspace/training
 ```
 localhost:6006
 ```
-![Alt text](images/31.png)
+![avatar](images/31.PNG)
 
 ## Improve the performances
 ### Data augmentation
 
-![Alt text](images/21.png) 
-![Alt text](images/22.png) 
-![Alt text](images/23.png) 
-![Alt text](images/24.png)
+![avatar](images/21.PNG) 
+![avatar](images/22.PNG) 
+![avatar](images/23.PNG) 
+![avatar](images/24.PNG)
 
 Most likely, this initial experiment did not yield optimal results. However, you can make multiple changes to the config file to improve this model. One obvious change consists in improving the data augmentation strategy. The [`preprocessor.proto`](https://github.com/tensorflow/models/blob/master/research/object_detection/protos/preprocessor.proto) file contains the different data augmentation method available in the Tf Object Detection API. To help you visualize these augmentations, we are providing a notebook: `Explore augmentations.ipynb`. Using this notebook, try different data augmentation combinations and select the one you think is optimal for our dataset. Justify your choices in the writeup. 
 
