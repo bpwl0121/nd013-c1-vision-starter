@@ -19,6 +19,25 @@ gcloud auth login
 python download_process.py --data_dir /home/workspace/data/ --temp_dir /home/backups/
 ```
 
+## Dataset
+
+### EDA
+
+![avatar](images/1.png) 
+![avatar](images/2.png)
+![avatar](images/5.png)
+![avatar](images/6.png)
+
+![avatar](images/11.png) 
+![avatar](images/12.png) 
+![avatar](images/13.png) 
+![avatar](images/14.png)
+![avatar](images/15.png) 
+
+
+### Cross validation
+This section should detail the cross validation strategy and justify your approach.
+
 ### Edit the config file
 
 Now you are ready for training. As we explain during the course, the Tf Object Detection API relies on **config files**. The config that we will use for this project is `pipeline.config`, which is the config for a SSD Resnet 50 640x640 model. You can learn more about the Single Shot Detector [here](https://arxiv.org/pdf/1512.02325.pdf). 
@@ -31,7 +50,7 @@ python edit_config.py --train_dir /home/workspace/data/train/ --eval_dir /home/w
 ```
 A new config file has been created, `pipeline_new.config`.
 
-### Training
+## Training
 
 You will now launch your very first experiment with the Tensorflow object detection API. Create a folder `training/reference`. Move the `pipeline_new.config` to this folder. You will now have to launch two processes: 
 * a training process:
@@ -63,12 +82,16 @@ python main.py --logdir=/home/workspace/training
 4. open board in the web
 ```
 localhost:6006
-
-
 ```
-   
+![avatar](images/31.png)
 
-### Improve the performances
+## Improve the performances
+### Data augmentation
+
+![avatar](images/21.png) 
+![avatar](images/22.png) 
+![avatar](images/23.png) 
+![avatar](images/24.png)
 
 Most likely, this initial experiment did not yield optimal results. However, you can make multiple changes to the config file to improve this model. One obvious change consists in improving the data augmentation strategy. The [`preprocessor.proto`](https://github.com/tensorflow/models/blob/master/research/object_detection/protos/preprocessor.proto) file contains the different data augmentation method available in the Tf Object Detection API. To help you visualize these augmentations, we are providing a notebook: `Explore augmentations.ipynb`. Using this notebook, try different data augmentation combinations and select the one you think is optimal for our dataset. Justify your choices in the writeup. 
 
@@ -97,11 +120,7 @@ This section should contain a brief description of the project and what we are t
 ### Set up
 This section should contain a brief description of the steps to follow to run the code for this repository.
 
-### Dataset
-#### Dataset analysis
-This section should contain a quantitative and qualitative description of the dataset. It should include images, charts and other visualizations.
-#### Cross validation
-This section should detail the cross validation strategy and justify your approach.
+
 
 ### Training 
 #### Reference experiment
