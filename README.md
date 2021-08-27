@@ -23,13 +23,13 @@ python download_process.py --data_dir /home/workspace/data/ --temp_dir /home/bac
 
 ### EDA
 
-![Alt text](https://github.com/bpwl0121/nd013-c1-vision-starter/tree/main/images/1.png) 
-![Alt text](https://github.com/bpwl0121/nd013-c1-vision-starter/tree/main/images/2.png)
-![Alt text](https://github.com/bpwl0121/nd013-c1-vision-starter/tree/main/images/5.png)
-![Alt text](https://github.com/bpwl0121/nd013-c1-vision-starter/tree/main/images/6.png)
+![Alt text](https://github.com/bpwl0121/nd013-c1-vision-starter/tree/main/images/1.PNG) 
+![Alt text](https://github.com/bpwl0121/nd013-c1-vision-starter/tree/main/images/2.PNG)
+![Alt text](https://github.com/bpwl0121/nd013-c1-vision-starter/tree/main/images/5.PNG)
+![Alt text](https://github.com/bpwl0121/nd013-c1-vision-starter/tree/main/images/6.PNG)
 
-![Alt text](images/11.png) 
-![Alt text](images/12.png) 
+![](images/11.png) 
+![avatar](images/12.PNG) 
 ![Alt text](images/13.png) 
 ![Alt text](images/14.png)
 ![Alt text](images/15.png) 
