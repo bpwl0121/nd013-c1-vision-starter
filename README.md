@@ -19,30 +19,6 @@ gcloud auth login
 python download_process.py --data_dir /home/workspace/data/ --temp_dir /home/backups/
 ```
 
-
-
-
-
-
-
-
-
-### Exploratory Data Analysis
-
-Now that you have downloaded and processed the data, you should explore the dataset! This is the most important task of any machine learning project. To do so, open the `Exploratory Data Analysis` notebook. In this notebook, your first task will be to implement a `display_instances` function to display images and annotations using `matplotlib`. This should be very similar to the function you created during the course. Once you are done, feel free to spend more time exploring the data and report your findings. Report anything relevant about the dataset in the writeup.
-
-Keep in mind that you should refer to this analysis to create the different spits (training, testing and validation). 
-
-
-### Create the splits
-
-Now you have become one with the data! Congratulations! How will you use this knowledge to create the different splits: training, validation and testing. There are no single answer to this question but you will need to justify your choice in your submission. You will need to implement the `split_data` function in the `create_splits.py` file. Once you have implemented this function, run it using:
-```
-python create_splits.py --data_dir /home/workspace/data/
-```
-
-NOTE: Keep in mind that your storage is limited. The files should be <ins>moved</ins> and not copied. 
-
 ### Edit the config file
 
 Now you are ready for training. As we explain during the course, the Tf Object Detection API relies on **config files**. The config that we will use for this project is `pipeline.config`, which is the config for a SSD Resnet 50 640x640 model. You can learn more about the Single Shot Detector [here](https://arxiv.org/pdf/1512.02325.pdf). 
@@ -60,16 +36,37 @@ A new config file has been created, `pipeline_new.config`.
 You will now launch your very first experiment with the Tensorflow object detection API. Create a folder `training/reference`. Move the `pipeline_new.config` to this folder. You will now have to launch two processes: 
 * a training process:
 ```
-python model_main_tf2.py --model_dir=training/reference/ --pipeline_config_path=training/reference/pipeline_new.config
+python experiments/model_main_tf2.py --model_dir=training/reference/ --pipeline_config_path=training/reference/pipeline_new.config --checkpoint_every_n=50
 ```
 * an evaluation process:
 ```
-python model_main_tf2.py --model_dir=training/reference/ --pipeline_config_path=training/reference/pipeline_new.config --checkpoint_dir=training/reference/
+python experiments/model_main_tf2.py --model_dir=training/reference/ --pipeline_config_path=training/reference/pipeline_new.config --checkpoint_dir=training/reference/
 ```
 
 NOTE: both processes will display some Tensorflow warnings.
 
-To monitor the training, you can launch a tensorboard instance by running `tensorboard --logdir=training`. You will report your findings in the writeup. 
+To monitor training, you can start a tensorboard instance by running the following command:
+
+1. check the location of Tensorflow
+```
+pip show tensorflow
+```
+
+2. Go to that location you get from the above output.
+```
+cd /data/virtual_envs/sdc-c1-gpu-augment/lib/python3.7/site-packages/tensorboard
+```
+3. Execute the following command to launch the tensorboard.
+```
+python main.py --logdir=/home/workspace/training
+```
+4. open board in the web
+```
+localhost:6006
+
+
+```
+   
 
 ### Improve the performances
 
