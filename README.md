@@ -1,7 +1,7 @@
 # Object detection in an Urban Environment
 
 ## Project overview
-This section should contain a brief description of the project and what we are trying to achieve. Why is object detection such an important component of self driving car systems?
+This project uses deep learning object detection algorithms to detect objects in images from the car's camera.
 
 ## Setup
 ### Workspace
@@ -105,7 +105,7 @@ localhost:6006
 ```
 
 The training results are as follows:   
-As can be seen from the figure, the training results seem to be stable, but the loss is very high, probably because the training step is too small, only 100, compared with the original step (25000). And there is no data augmentation
+As can be seen from the figure, the training results seem to be stable, but the loss is very high, probably because the training step is too small, only 100, compared with the original step (25000). And there is no data augmentation.
 ![avatar](images/31.PNG)
 
 ## Improve the performances
@@ -117,28 +117,43 @@ From the EDA we can see that light is a very important factor affecting the trav
 ![avatar](images/23.PNG) 
 ![avatar](images/24.PNG)
 
-### Experiment
+### Experiment and discussion
 On top of `pipeline_new.config`, we make the following changes, and name the new config `pipeline_new_v1.config`   
 
 | parameter | new |
 | ------ | ------ |
 | `optimizer ` | adam_optimizer |
 | `learning_rate_base` |  0.01 |
-| ``batch_size`` | 16 |
+| ``batch_size`` | 4 |
 | ``data_augmentation_options `` | random_adjust_brightness  |
 | ``warmup_learning_rate`` |  0.003  |
 
+The training results are as follows:   
+From the figure, it can be seen that the training result has a very large loss compared to the reference, probably due to the improper ``adam`` optimizer.
+![avatar](images/v1.PNG)
+
+On top of `pipeline_new.config` and the previous experiment, we make the following changes, and name the new config `pipeline_new_v2.config`   
 
 
+| parameter | new |
+| ------ | ------ |
+| `optimizer ` | momentum_optimizer |
+| `learning_rate_base` |  0.03 |
+| ``batch_size`` | 4 |
+| ``data_augmentation_options `` | random_adjust_brightness  |
+| ``warmup_learning_rate`` |  0.01 |
+| ``warmup_steps`` |  10  |
 
-### Creating an animation
-#### Export the trained model
-Modify the arguments of the following function to adjust it to your models:
-```
-python .\exporter_main_v2.py --input_type image_tensor --pipeline_config_path training/experiment0/pipeline.config --trained_checkpoint_dir training/experiment0/ckpt-50 --output_directory training/experiment0/exported_model/
-```
 
-Finally, you can create a video of your model's inferences for any tf record file. To do so, run the following command (modify it to your files):
-```
-python inference_video.py -labelmap_path label_map.pbtxt --model_path training/experiment0/exported_model/saved_model --tf_record_path /home/workspace/data/test/tf.record --config_path training/experiment0/pipeline_new.config --output_path animation.mp4
-```
+The training results are as follows:   
+From the figure, it can be seen that the training loss is reduced compared to the reference.
+![avatar](images/v2.PNG)
+
+The eval results are as follows:    
+The eval results do not perform well, probably because we only use a small dataset for training and the training steps are only 100.
+![avatar](images/v2_val.PNG)
+
+Due to udacity's GPU and storage limitations. I can't do more experiments. But the feasible enhancements are as follows:
+1. So far we have used the `ssd_resnet50_v1_fpn_keras` model, we could use a deeper model.
+2.  Using more data, we only used 9 tfrecord as training dataset due to GPU and storage limitations.
+3.  Use a larger ``batchsize``
