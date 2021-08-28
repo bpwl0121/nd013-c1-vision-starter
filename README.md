@@ -1,6 +1,11 @@
 # Object detection in an Urban Environment
 
+## Project overview
+This section should contain a brief description of the project and what we are trying to achieve. Why is object detection such an important component of self driving car systems?
+
 ## Setup
+### Workspace
+Udacity's virtual machine for this project
 
 ### Download data
 For this project, we will be using data from the [Waymo Open dataset](https://waymo.com/open/). The files can be downloaded directly from the website as tar files or from the [Google Cloud Bucket](https://console.cloud.google.com/storage/browser/waymo_open_dataset_v_1_2_0_individual_files/) as individual tf records.
@@ -20,30 +25,37 @@ python download_process.py --data_dir /home/workspace/data/ --temp_dir /home/bac
 ```
 
 ## Dataset
-
 ### EDA
+There are three categories of pictures, namely vehicles, pedestrians and cyclists.  
+
+Here we show 4 images and their boxes. 
 
 ![avatar](images/1.PNG) 
 ![avatar](images/2.PNG) 
 ![avatar](images/5.PNG) 
 ![avatar](images/6.PNG)
 
-
-## dsdasda
+We used one thousand images as a dataset to get the image containing the most instances in one thousand images.  
+From the images it can be concluded that the dataset contains many road scenes, from day to night, from urban to highway situations.    
+And where urban scenes may be difficult to be trained by the model because there are many instances and the boxes are highly overlapping.      
+Dark scenes are also difficult to process because the lack of lighting makes the image lack the necessary information, despite the presence of boxes.
 
 ![avatar](images/11.PNG) 
 ![avatar](images/12.PNG) 
 ![avatar](images/13.PNG) 
 ![avatar](images/14.PNG)
+
+And the categories are also highly biased, with only 12 instances of cyclists in a thousand images, despite the existence of 16,841 instances of cars.
 ![avatar](images/15.PNG) 
 
 
 ### Cross validation
-This section should detail the cross validation strategy and justify your approach.
+Due to the storage and GPU limitations of the udacity VM, only 15 tfrecords from waymo were processed and used.    
+Of these, 60% are used for the training dataset, 20% for the validation dataset, and the remaining 20% for the test dataset.
+
+## Training
 
 ### Edit the config file
-
-Now you are ready for training. As we explain during the course, the Tf Object Detection API relies on **config files**. The config that we will use for this project is `pipeline.config`, which is the config for a SSD Resnet 50 640x640 model. You can learn more about the Single Shot Detector [here](https://arxiv.org/pdf/1512.02325.pdf). 
 
 First, let's download the [pretrained model](http://download.tensorflow.org/models/object_detection/tf2/20200711/ssd_resnet50_v1_fpn_640x640_coco17_tpu-8.tar.gz) and move it to `training/pretrained-models/`. 
 
@@ -53,7 +65,12 @@ python edit_config.py --train_dir /home/workspace/data/train/ --eval_dir /home/w
 ```
 A new config file has been created, `pipeline_new.config`.
 
-## Training
+In `pipeline_new.config`, the `num_steps` is `25000` and the `warmup_steps` of `cosine_decay_learning_rate` is `2000`. The data augmentation: `random_horizontal_flip` and `random_crop_image`.   
+
+In order to speed up the computation, the `num_steps` is changed to `100` and the `warmup_steps` of `cosine_decay_learning_rate` is changed to `20`. No data augmentation.
+
+### Reference experiment
+This section should detail the results of the reference experiment. It should includes training metrics and a detailed explanation of the algorithm's performances.
 
 You will now launch your very first experiment with the Tensorflow object detection API. Create a folder `training/reference`. Move the `pipeline_new.config` to this folder. You will now have to launch two processes: 
 * a training process:
@@ -86,21 +103,32 @@ python main.py --logdir=/home/workspace/training
 ```
 localhost:6006
 ```
+
+The training results are as follows:   
+As can be seen from the figure, the training results seem to be stable, but the loss is very high, probably because the training step is too small, only 100, compared with the original step (25000). And there is no data augmentation
 ![avatar](images/31.PNG)
 
 ## Improve the performances
 ### Data augmentation
+From the EDA we can see that light is a very important factor affecting the traveling image. Therefore, we adjust the different lighting conditions of the simulated driving image by changing the brightness. (Different lighting is normal in driving, but other traditional image augmentation such as ``random_horizontal_flip`` are a bit strange because you are less likely to break traffic rules and drive in the wrong lane.)
 
 ![avatar](images/21.PNG) 
 ![avatar](images/22.PNG) 
 ![avatar](images/23.PNG) 
 ![avatar](images/24.PNG)
 
-Most likely, this initial experiment did not yield optimal results. However, you can make multiple changes to the config file to improve this model. One obvious change consists in improving the data augmentation strategy. The [`preprocessor.proto`](https://github.com/tensorflow/models/blob/master/research/object_detection/protos/preprocessor.proto) file contains the different data augmentation method available in the Tf Object Detection API. To help you visualize these augmentations, we are providing a notebook: `Explore augmentations.ipynb`. Using this notebook, try different data augmentation combinations and select the one you think is optimal for our dataset. Justify your choices in the writeup. 
+### Experiment
+On top of `pipeline_new.config`, we make the following changes, and name the new config `pipeline_new_v1.config`   
 
-Keep in mind that the following are also available:
-* experiment with the optimizer: type of optimizer, learning rate, scheduler etc
-* experiment with the architecture. The Tf Object Detection API [model zoo](https://github.com/tensorflow/models/blob/master/research/object_detection/g3doc/tf2_detection_zoo.md) offers many architectures. Keep in mind that the `pipeline.config` file is unique for each architecture and you will have to edit it. 
+| parameter | new |
+| ------ | ------ |
+| `optimizer ` | adam_optimizer |
+| `learning_rate_base` |  0.01 |
+| ``batch_size`` | 16 |
+| ``data_augmentation_options `` | random_adjust_brightness  |
+| ``warmup_learning_rate`` |  0.003  |
+
+
 
 
 ### Creating an animation
@@ -114,21 +142,3 @@ Finally, you can create a video of your model's inferences for any tf record fil
 ```
 python inference_video.py -labelmap_path label_map.pbtxt --model_path training/experiment0/exported_model/saved_model --tf_record_path /home/workspace/data/test/tf.record --config_path training/experiment0/pipeline_new.config --output_path animation.mp4
 ```
-
-## Submission Template
-
-### Project overview
-This section should contain a brief description of the project and what we are trying to achieve. Why is object detection such an important component of self driving car systems?
-
-### Set up
-This section should contain a brief description of the steps to follow to run the code for this repository.
-
-
-
-### Training 
-#### Reference experiment
-This section should detail the results of the reference experiment. It should includes training metrics and a detailed explanation of the algorithm's performances.
-
-#### Improve on the reference
-This section should highlight the different strategies you adopted to improve your model. It should contain relevant figures and details of your findings.
- 
