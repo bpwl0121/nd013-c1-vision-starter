@@ -4,8 +4,16 @@
 This project uses deep learning object detection algorithms to detect objects in images from the car's camera.
 
 ## Setup
+you can use Workspace or Local Setup
+
 ### Workspace
 Udacity's virtual machine for this project
+
+### Local Setup
+
+For local setup if you have your own Nvidia GPU, you can use the provided Dockerfile and requirements in the [build directory](./build).
+
+Follow [the README therein](./build/README.md) to create a docker container and install all prerequisites.
 
 ### Download data
 For this project, we will be using data from the [Waymo Open dataset](https://waymo.com/open/). The files can be downloaded directly from the website as tar files or from the [Google Cloud Bucket](https://console.cloud.google.com/storage/browser/waymo_open_dataset_v_1_2_0_individual_files/) as individual tf records.
