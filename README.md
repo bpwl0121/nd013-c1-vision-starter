@@ -165,3 +165,7 @@ Due to udacity's GPU and storage limitations. I can't do more experiments. But t
 1. So far we have used the `ssd_resnet50_v1_fpn_keras` model, we could use a deeper model.
 2.  Using more data, we only used 9 tfrecord as training dataset due to GPU and storage limitations.
 3.  Use a larger ``batchsize``
+
+
+## feedback from mentor
+![avatar](images/feedback.png)
